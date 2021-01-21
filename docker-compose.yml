@@ -1,0 +1,51 @@
+---
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/development/apache/Dockerfile
+      args:
+        FILES: docker/development/apache
+    volumes:
+      - app-volume:/var/www/cakephp
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      TZ: "Asia/Tokyo"
+    depends_on:
+      - db
+  db:
+    build:
+      context: .
+      dockerfile: docker/development/mysql/Dockerfile
+      args:
+        FILES: docker/development/mysql
+    volumes:
+      - db-volume:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: first_db
+      MYSQL_ROOT_PASSWORD: password
+      TZ: "Asia/Tokyo"
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+
+volumes:
+  db-volume:
+    driver_opts:
+      type: none
+      device: $PWD/docker/development/mysql/data
+      o: bind
+  app-volume:
+    driver_opts:
+      type: none
+      device: $PWD
+      o: bind
+...
