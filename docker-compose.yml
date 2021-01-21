@@ -36,7 +36,14 @@ services:
     ports:
       - "8025:8025"
       - "1025:1025"
-
+  scheduler:
+    build:
+      context: .
+      dockerfile: docker/development/scheduler/Dockerfile
+      args:
+        FILES: docker/development/scheduler
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 volumes:
   db-volume:
     driver_opts:

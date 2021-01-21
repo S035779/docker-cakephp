@@ -1,0 +1,2 @@
+# min   hour    day     month   weekday command
+*/5 * * * * docker exec -u www-data:www-data $(docker ps -f "name=docker-cakephp_scheduler_1" -q) Console/cake
